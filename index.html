@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Twitch Bot Docs — eendychan</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0b0b0c;
+  --surface: #131314;
+  --border: rgba(255,255,255,.06);
+  --text: #f4f4f4;
+  --soft: rgba(255,255,255,.58);
+  --endy: #ffffff;
+  --gh: #b48eff;
+  --mk: #ff6b6b;
+  --norvil: #7ee0c0;
+  --bot: #a970ff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  background: #101011;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 28px;
+  letter-spacing: -.04em;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: var(--soft);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  transition: all .15s;
+}
+
+.sidebar a:hover {
+  background: rgba(255,255,255,.05);
+  color: white;
+}
+
+.content {
+  padding: 32px 40px;
+  max-width: 880px;
+}
+
+.hero-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: rgba(255,255,255,.35);
+  margin-bottom: 8px;
+}
+
+h1 {
+  font-size: 44px;
+  letter-spacing: -.06em;
+  margin-bottom: 24px;
+  font-weight: 800;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+.command {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.command-top {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.command-name {
+  font-size: 22px;
+  font-weight: 800;
+  font-family: monospace;
+}
+
+.command-tag {
+  font-size: 10px;
+  color: rgba(255,255,255,.4);
+  background: rgba(255,255,255,.04);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.command-body {
+  padding: 16px 18px;
+}
+
+.description {
+  color: rgba(255,255,255,.78);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.chat {
+  background: #0d0d0e;
+  border: 1px solid rgba(255,255,255,.04);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.msg {
+  font-size: 13px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  line-height: 1.5;
+}
+
+.badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 2px;
+}
+
+.badges img {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+.name {
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.name.endy { color: #ffffff; }
+.name.gh { color: #b48eff; }
+.name.mk { color: #ff6b6b; }
+.name.norvil { color: #7ee0c0; }
+.name.botname { color: #a970ff; }
+
+.msg-text {
+  color: var(--text);
+  word-break: break-word;
+}
+
+.separator {
+  margin: 20px 0 8px;
+  font-size: 12px;
+  color: var(--soft);
+  letter-spacing: .5px;
+}
+
+footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--soft);
+  text-align: center;
+}
+
+@media (max-width: 680px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: relative;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .content {
+    padding: 24px;
+  }
+  h1 {
+    font-size: 32px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+<div class="logo">🎮 eendychan</div>
+<nav>
+<a href="#home">🏠 Главная</a>
+<a href="#automod">🤖 Автомод</a>
+<a href="#predictions">📊 Ставки</a>
+<a href="#polls">📋 Опросы</a>
+<a href="#rewards">🎁 Награды</a>
+<a href="#trust">⭐ Траст статус</a>
+<a href="#games">🎮 Категория</a>
+<a href="#extra">⚙️ Дополнительные</a>
+</nav>
+</aside>
+
+<main class="content" id="home">
+<div class="hero-label">ДОКУМЕНТАЦИЯ</div>
+<h1>Twitch Bot<br>eendychan</h1>
+<div class="description" style="margin-bottom: 32px;">Модульный бот для модерации, ставок, опросов, наград и управления категорией. Все команды — только для модераторов и стримера, если не указано иное.</div>
+
+<!-- ======================== АВТОМОД ======================== -->
+<div class="hero-label" id="automod" style="margin-top: 20px;">МОДУЛЬ</div>
+<h2>🤖 Автомод</h2>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!am</div><div class="command-tag">AUTOMOD</div></div>
+<div class="command-body">
+<div class="description">Включение/выключение автомода, просмотр статуса и настроек модулей (sym, lang, emoji, pasta).</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !am</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: (𝒊) Всего фраз: 127 (+ 12 FM) • Паки (2): =toxicity(43) =spam(18)</span></div>
+</div>
+<div class="chat" style="margin-top: 8px;">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !am sym off</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Модерация странных символов выключена</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!am info</div><div class="command-tag">AUTOMOD</div></div>
+<div class="command-body">
+<div class="description">Детальная информация о настройках всех модулей автомода.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !am info</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: (𝒊) Автомоды: sym: [ON / 10m] • emoji: [OFF / 60s] • lang: [ON / 5m] • pasta: [ON / 4 / 10m]</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!bw / !mw / !dw</div><div class="command-tag">AUTOMOD</div></div>
+<div class="command-body">
+<div class="description">Добавление слов в чёрный список (бан/мут/удаление). !mw требует время: !mw 10m фраза</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !bw "очень плохое слово" =toxicity</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Бан-слово добавлено: очень плохое слово (пак: toxicity)</span></div>
+</div>
+<div class="chat" style="margin-top: 8px;">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !mw 5m спам-фраза</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Мут-слово добавлено: спам-фраза (5m)</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!w-</div><div class="command-tag">AUTOMOD</div></div>
+<div class="command-body">
+<div class="description">Удаление слова из любого списка (бан/мут/дел). !w- =пак — удаляет целый пак.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !w- "очень плохое слово"</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Слово удалено: очень плохое слово</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!am pasta</div><div class="command-tag">AUTOMOD</div></div>
+<div class="command-body">
+<div class="description">Настройка защиты от повторяющихся сообщений: !am pasta 5 30s</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !am pasta 3 1m</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Модерация повторов: лимит 3, наказание: 1m</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!am lang / emoji / sym</div><div class="command-tag">AUTOMOD</div></div>
+<div class="command-body">
+<div class="description">Управление модулями: !am lang on/off, !am emoji 300s</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !am emoji off</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Модерация эмодзи выключена</span></div>
+</div>
+</div>
+</div>
+
+<!-- ======================== СТАВКИ ======================== -->
+<div class="hero-label" id="predictions" style="margin-top: 32px;">МОДУЛЬ</div>
+<h2>📊 Ставки</h2>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!pred</div><div class="command-tag">PREDICTIONS</div></div>
+<div class="command-body">
+<div class="description">!pred 2m "Кто заберёт вин?" КомандаА/КомандаБ — создание ставки. !pred stop — остановить приём. !pred вариант — выбрать победителя.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !pred 5m "Кто первый убьёт босса?" Энди/Норвил</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: 📢 СТАВКА ОТКРЫТА: «Кто первый убьёт босса?» • 5 МИНУТ до окончания ставки!</span></div>
+</div>
+<div class="chat" style="margin-top: 8px;">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !pred Энди</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: 🎉 СТАВКА ЗАВЕРШЕНА: Победитель • «Энди»!</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!pred+ / !pred-</div><div class="command-tag">PREDICTIONS</div></div>
+<div class="command-body">
+<div class="description">!pred+ "монетка" 1m "Орёл или решка?" Орёл/Решка — сохранение быстрой ставки. !pred- монетка — удаление.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !pred+ "bossfight" 3m "Кто дамагнет?" Энди/Норвил</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: (★) Быстрая ставка «bossfight» сохранена: [3m] «Кто дамагнет?» • Энди/Норвил</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!predinfo</div><div class="command-tag">PREDICTIONS</div></div>
+<div class="command-body">
+<div class="description">Список всех сохранённых быстрых ставок.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !predinfo</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: (★) Быстрые ставки: монетка • bossfight • 2x1</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!repred / !повторить</div><div class="command-tag">PREDICTIONS</div></div>
+<div class="command-body">
+<div class="description">Повторяет последнюю созданную ставку. !repred 5m — с другим временем.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !repred 2m</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: 📢 СТАВКА ОТКРЫТА: «Кто дамагнет?» • 2 МИНУТЫ до окончания ставки!</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!закрыть / !удалить / !раздать</div><div class="command-tag">PREDICTIONS</div></div>
+<div class="command-body">
+<div class="description">Алиасы: !закрыть — остановить приём, !удалить — отменить ставку с возвратом баллов, !раздать вариант — выбрать победителя.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !удалить</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Ставка удалена - возвращаю баллы всем участникам!</span></div>
+</div>
+</div>
+</div>
+
+<!-- ======================== ОПРОСЫ ======================== -->
+<div class="hero-label" id="polls" style="margin-top: 32px;">МОДУЛЬ</div>
+<h2>📋 Опросы</h2>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!poll / !опрос</div><div class="command-tag">POLLS</div></div>
+<div class="command-body">
+<div class="description">!poll 2m "Как тебе стрим?" Отлично/Норм/Так себе — создание опроса. !poll stop — досрочное завершение.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !poll 1m "Лучшая игра?" Valheim/Minecraft/Osu</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: 📊 ОПРОС ОТКРЫТ: «Лучшая игра?» • 1 МИНУТУ до окончания!</span></div>
+</div>
+<div class="chat" style="margin-top: 8px;">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !poll stop</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: 📊 ОПРОС ЗАВЕРШЁН: «Лучшая игра?» • Итого 47 голосов • Valheim: 23 (49%) | Minecraft: 15 (32%) | Osu: 9 (19%)</span></div>
+</div>
+</div>
+</div>
+
+<!-- ======================== НАГРАДЫ ======================== -->
+<div class="hero-label" id="rewards" style="margin-top: 32px;">МОДУЛЬ</div>
+<h2>🎁 Награды</h2>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!rwd+</div><div class="command-tag">REWARDS</div></div>
+<div class="command-body">
+<div class="description">!rwd+ "Випка" 100000+50000 "Описание" +vip — создание награды с автоповышением цены и выдачей VIP.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !rwd+ "Бочка" 50000+25000 "Повышение цены" -vip</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: ✓ Награда «Бочка» создана: 50 000 (+25 000) баллов | авто-VIP. Цвет: #FF4500</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!rwds / !rwd</div><div class="command-tag">REWARDS</div></div>
+<div class="command-body">
+<div class="description">!rwds — список наград. !rwd "Випка" on/off/pause — включение/выключение/пауза. !rwd info "Випка" — детальная информация.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !rwds</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Награды: ✅ Випка (150 000) • ✅ Бочка (50 000) • ⏸ Таймер (10 000)</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!rwd- / !rwd=</div><div class="command-tag">REWARDS</div></div>
+<div class="command-body">
+<div class="description">!rwd- "название" — удаление награды. !rwd= "Старое"="Новое" 100000 "Новое описание" — редактирование.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !rwd- "Бочка"</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: ✓ Награда «Бочка» удалена.</span></div>
+</div>
+</div>
+</div>
+
+<!-- ======================== ТРАСТ СТАТУС ======================== -->
+<div class="hero-label" id="trust" style="margin-top: 32px;">МОДУЛЬ</div>
+<h2>⭐ Траст статус</h2>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!trust</div><div class="command-tag">TRUST</div></div>
+<div class="command-body">
+<div class="description">!trust @user — выдать доверенный статус (только модератор/стример). !trust on/off — включить систему.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !trust ghghh_</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Выдал статус для: @ghghh_</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!untrust</div><div class="command-tag">TRUST</div></div>
+<div class="command-body">
+<div class="description">Забрать доверенный статус у пользователя.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !untrust ghghh_</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Разжаловал: @ghghh_</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!trusts</div><div class="command-tag">TRUST</div></div>
+<div class="command-body">
+<div class="description">Список доверенных пользователей с их статистикой мутов/банов.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !trusts</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Список доверенных: norvilmaster (3м/1б) • makk (12м/2б) • ghghh_ (8м/0б)</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!mute / !ban</div><div class="command-tag">TRUST</div></div>
+<div class="command-body">
+<div class="description">Доверенные могут мутить и банить: !mute 10m baduser, !ban spamer. Алиасы: !мут, !уебать, !бан.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1"></div><span class="name norvil">Norv1lMaster</span><span class="msg-text">: !mute 5m reklama</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Мут reklama на 5м</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!unban / !размут</div><div class="command-tag">TRUST</div></div>
+<div class="command-body">
+<div class="description">Разбан или размут пользователя доверенным.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1"></div><span class="name norvil">Norv1lMaster</span><span class="msg-text">: !unban reklama</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: ✓ Разбан/размут reklama</span></div>
+</div>
+</div>
+</div>
+
+<!-- ======================== КАТЕГОРИЯ ======================== -->
+<div class="hero-label" id="games" style="margin-top: 32px;">МОДУЛЬ</div>
+<h2>🎮 Категория</h2>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!g+ / !g-</div><div class="command-tag">GAMES</div></div>
+<div class="command-body">
+<div class="description">!g+ !cs "Counter-Strike 2" — создание шортката для смены категории. !g- !cs — удаление.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !g+ !val Valorant</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Команда !val → «Valorant» создана</span></div>
+</div>
+<div class="chat" style="margin-top: 8px;">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !val</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Категория изменена на «Valorant»</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!ginfo</div><div class="command-tag">GAMES</div></div>
+<div class="command-body">
+<div class="description">Список всех сохранённых игровых шорткатов.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !ginfo</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Команды !g+: !val • !cs • !mc</span></div>
+</div>
+</div>
+</div>
+
+<!-- ======================== ДОПОЛНИТЕЛЬНЫЕ ======================== -->
+<div class="hero-label" id="extra" style="margin-top: 32px;">МОДУЛЬ</div>
+<h2>⚙️ Дополнительные</h2>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!$ / !скок / !math</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">Калькулятор и конвертер валют: !$ 2+2*3, !$ 100$ в рубли, !$ 1500₽ в евро.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !$ 1500₽ в евро</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: 1,500 RUB = 14.85 EUR (курс: 1 RUB = 0.0099 EUR)</span></div>
+</div>
+<div class="chat" style="margin-top: 8px;">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !$ 2+2*3</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: 2+2*3 = 8</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!timer / !таймер</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">!timer 2ч30м — запуск таймера. !timer #чат 30м "Не забываем правила" — периодическое сообщение. !timer stop — остановка.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !timer 1h30m</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Завел таймер на • 01ч 30м 00с</span></div>
+</div>
+<div class="chat" style="margin-top: 8px;">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !timer</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: До конца таймера • 01ч 22м 15с | Периодический #чат: каждые 30м • «Не забываем правила»</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!clip / !клип</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">Создание клипа (только для доверенных/модераторов).</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1"></div><span class="name norvil">Norv1lMaster</span><span class="msg-text">: !clip</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: ✂️ Клип создан: https://clips.twitch.tv/GloriousSincereWombatRitzMitz</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!время / !game</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">!время — длительность стрима и текущая игра. !game — только текущая игра.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !время</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Время стрима: 02ч 34м 12с • Игра: Valorant • Сессия: 01ч 20м</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!игры / !games</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">История игр за текущий стрим с длительностью сессий.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !игры</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Крайняя: Valorant • Все: Valorant(1ч20м) • Minecraft(45м) • Just Chatting(30м)</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!cd / !cdp</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">!cd 10 — глобальный кулдаун. !cd !time 15 — персональный КД для команды. !cdp — персональный КД пользователя.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !cd !время 30</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: ✓ КД для !время: 30с</span></div>
+</div>
+<div class="chat" style="margin-top: 8px;">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name mk">makkkena</span><span class="msg-text">: !cd</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: Глобальный КД: 5с | Персональный КД: 20с</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!info</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">Информация о команде: !info !время — показывает КД и статус команды.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name gh">ghghh_</span><span class="msg-text">: !info !time</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: (?) Команда: !time • КД: 30, пКД: 20 • Статус: ON</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!on / !off</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">Включение/отключение групп команд: !off automod, !on trust, !off pred.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !off automod</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: ✓ Отключено: группа [automod]</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!on admin / !off admin</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">Режим «только для админа» — бот отвечает на команды только endychann. Автомод продолжает работать для всех.</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !on admin</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: ✓ Админ-мод включён (бот только для админа)</span></div>
+</div>
+</div>
+</div>
+
+<div class="command">
+<div class="command-top"><div class="command-name">!botrestart</div><div class="command-tag">EXTRA</div></div>
+<div class="command-body">
+<div class="description">Перезапуск бота (только для администратора endychann).</div>
+<div class="chat">
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"></div><span class="name endy">endychann</span><span class="msg-text">: !botrestart</span></div>
+<div class="msg"><div class="badges"><img src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1"><img src="https://static-cdn.jtvnw.net/badges/v1/3ffa9565-c35b-4cad-800b-041e60659cf2/1"></div><span class="name botname">eendychan</span><span class="msg-text">: 🔄 Перезапускаю бота...</span></div>
+</div>
+</div>
+</div>
+
+<footer>
+eendychan • GitHub Pages • Twitch Bot Documentation
+</footer>
+
+</main>
+</div>
+</body>
+</html>
