@@ -1,0 +1,35 @@
+// top30_data.json (пример файла)
+{
+  "top30": [
+    {"username": "endychann", "messages": 1542},
+    {"username": "ghghh_", "messages": 1203},
+    {"username": "makkkena", "messages": 987},
+    {"username": "Norv1lMaster", "messages": 876},
+    {"username": "user5", "messages": 765},
+    {"username": "user6", "messages": 654},
+    {"username": "user7", "messages": 543},
+    {"username": "user8", "messages": 432},
+    {"username": "user9", "messages": 321},
+    {"username": "user10", "messages": 298},
+    {"username": "user11", "messages": 276},
+    {"username": "user12", "messages": 254},
+    {"username": "user13", "messages": 232},
+    {"username": "user14", "messages": 210},
+    {"username": "user15", "messages": 195},
+    {"username": "user16", "messages": 180},
+    {"username": "user17", "messages": 165},
+    {"username": "user18", "messages": 150},
+    {"username": "user19", "messages": 135},
+    {"username": "user20", "messages": 120},
+    {"username": "user21", "messages": 110},
+    {"username": "user22", "messages": 100},
+    {"username": "user23", "messages": 90},
+    {"username": "user24", "messages": 80},
+    {"username": "user25", "messages": 70},
+    {"username": "user26", "messages": 60},
+    {"username": "user27", "messages": 50},
+    {"username": "user28", "messages": 40},
+    {"username": "user29", "messages": 30},
+    {"username": "user30", "messages": 20}
+  ]
+}
