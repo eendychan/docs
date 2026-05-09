@@ -1,4 +1,4 @@
-<!-- top30.html -->
+<!-- top30.html (исправленный) -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -259,7 +259,7 @@ footer {
     <tbody id="top30-list">
       <tr><td colspan="3" style="text-align: center;">Загрузка данных...</td></tr>
     </tbody>
-  </table>
+   </table>
 </div>
 
 <footer>
@@ -269,58 +269,110 @@ footer {
 </div>
 
 <script>
-  async function loadTop30() {
-    try {
-      const response = await fetch('top30_data.json?_=' + Date.now());
-      if (!response.ok) throw new Error('Файл не найден');
-      const data = await response.json();
-      if (!data || !data.top30 || !Array.isArray(data.top30)) throw new Error('Неверный формат');
-      
-      const tbody = document.getElementById('top30-list');
-      tbody.innerHTML = '';
-      
-      data.top30.forEach((user, index) => {
+  // Встроенные данные на 30 пользователей (твой пример)
+  const fallbackData = {
+    top30: [
+      {"username": "endychann", "messages": 1542},
+      {"username": "ghghh_", "messages": 1203},
+      {"username": "makkkena", "messages": 987},
+      {"username": "Norv1lMaster", "messages": 876},
+      {"username": "user5", "messages": 765},
+      {"username": "user6", "messages": 654},
+      {"username": "user7", "messages": 543},
+      {"username": "user8", "messages": 432},
+      {"username": "user9", "messages": 321},
+      {"username": "user10", "messages": 298},
+      {"username": "user11", "messages": 276},
+      {"username": "user12", "messages": 254},
+      {"username": "user13", "messages": 232},
+      {"username": "user14", "messages": 210},
+      {"username": "user15", "messages": 195},
+      {"username": "user16", "messages": 180},
+      {"username": "user17", "messages": 165},
+      {"username": "user18", "messages": 150},
+      {"username": "user19", "messages": 135},
+      {"username": "user20", "messages": 120},
+      {"username": "user21", "messages": 110},
+      {"username": "user22", "messages": 100},
+      {"username": "user23", "messages": 90},
+      {"username": "user24", "messages": 80},
+      {"username": "user25", "messages": 70},
+      {"username": "user26", "messages": 60},
+      {"username": "user27", "messages": 50},
+      {"username": "user28", "messages": 40},
+      {"username": "user29", "messages": 30},
+      {"username": "user30", "messages": 20}
+    ]
+  };
+
+  function renderTable(data) {
+    const tbody = document.getElementById('top30-list');
+    tbody.innerHTML = '';
+    if (!data.top30 || data.top30.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Нет данных</td></tr>';
+      return;
+    }
+    for (let i = 0; i < data.top30.length; i++) {
+      const user = data.top30[i];
+      const row = document.createElement('tr');
+      const rankCell = document.createElement('td');
+      rankCell.className = 'rank';
+      rankCell.textContent = (i + 1).toString();
+      const nameCell = document.createElement('td');
+      nameCell.className = 'username';
+      nameCell.textContent = user.username;
+      const msgCell = document.createElement('td');
+      msgCell.className = 'messages';
+      msgCell.textContent = user.messages.toLocaleString();
+      row.appendChild(rankCell);
+      row.appendChild(nameCell);
+      row.appendChild(msgCell);
+      tbody.appendChild(row);
+    }
+    // Если в данных меньше 30, заполняем пустыми строками (опционально)
+    if (data.top30.length < 30) {
+      for (let i = data.top30.length; i < 30; i++) {
         const row = document.createElement('tr');
         const rankCell = document.createElement('td');
         rankCell.className = 'rank';
-        rankCell.textContent = (index + 1).toString();
+        rankCell.textContent = (i + 1).toString();
         const nameCell = document.createElement('td');
-        nameCell.className = 'username';
-        nameCell.textContent = user.username;
+        nameCell.textContent = '—';
         const msgCell = document.createElement('td');
         msgCell.className = 'messages';
-        msgCell.textContent = user.messages.toLocaleString();
+        msgCell.textContent = '0';
         row.appendChild(rankCell);
         row.appendChild(nameCell);
         row.appendChild(msgCell);
         tbody.appendChild(row);
-      });
-      
-      // Если меньше 30 записей, добавим пустые строки (опционально)
-      if (data.top30.length < 30) {
-        for (let i = data.top30.length; i < 30; i++) {
-          const row = document.createElement('tr');
-          const rankCell = document.createElement('td');
-          rankCell.className = 'rank';
-          rankCell.textContent = (i + 1).toString();
-          const nameCell = document.createElement('td');
-          nameCell.className = 'username';
-          nameCell.textContent = '—';
-          const msgCell = document.createElement('td');
-          msgCell.className = 'messages';
-          msgCell.textContent = '0';
-          row.appendChild(rankCell);
-          row.appendChild(nameCell);
-          row.appendChild(msgCell);
-          tbody.appendChild(row);
-        }
       }
-    } catch (e) {
-      console.warn(e);
-      document.getElementById('top30-list').innerHTML = '<tr><td colspan="3" style="text-align: center;">Нет данных. Ожидайте обновления в начале месяца.</td></tr>';
     }
   }
-  
+
+  // Пытаемся загрузить внешний JSON, если не получается — используем fallback
+  async function loadTop30() {
+    try {
+      const response = await fetch('top30_data.json?_=' + Date.now());
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.top30 && Array.isArray(data.top30) && data.top30.length > 0) {
+          console.log('Загружены данные из top30_data.json');
+          renderTable(data);
+          return;
+        } else {
+          console.warn('Файл top30_data.json есть, но формат неверный или пустой. Использую fallback.');
+        }
+      } else {
+        console.warn(`Не удалось загрузить top30_data.json (HTTP ${response.status}). Использую fallback.`);
+      }
+    } catch (e) {
+      console.warn('Ошибка при загрузке top30_data.json:', e);
+    }
+    // Fallback
+    console.log('Использую встроенные данные (fallback)');
+    renderTable(fallbackData);
+  }
+
   loadTop30();
 </script>
 </body>
